@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Explorer — Découvrez le Cinéma</title>
+  <meta name="description" content="Explorez des milliers de films, sauvegardez vos favoris et découvrez le cinéma mondial." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" id="logoBtn">
+        <div class="logo-icon">
+          <i class="fas fa-film"></i>
+        </div>
+        <span class="logo-text">Movie<span class="logo-accent">Explorer</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#" class="nav-link active" data-section="home" id="navHome">
+          <i class="fas fa-home"></i>
+          <span>Accueil</span>
+        </a>
+        <a href="#" class="nav-link" data-section="favorites" id="navFavorites">
+          <i class="fas fa-heart"></i>
+          <span>Favoris</span>
+          <span class="fav-count" id="favCount" style="display:none">0</span>
+        </a>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle" title="Changer le thème" aria-label="Basculer thème">
+          <span class="toggle-track">
+            <span class="toggle-sun"><i class="fas fa-sun"></i></span>
+            <span class="toggle-moon"><i class="fas fa-moon"></i></span>
+            <span class="toggle-thumb"></span>
+          </span>
+        </button>
+
+        <!-- Mobile Menu -->
+        <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#" class="mob-link active" data-section="home">
+        <i class="fas fa-home"></i> Accueil
+      </a>
+      <a href="#" class="mob-link" data-section="favorites">
+        <i class="fas fa-heart"></i> Favoris
+        <span class="fav-count-mob" id="favCountMob" style="display:none">0</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════════ -->
+  <section class="hero" id="heroSection">
+    <div class="hero-bg">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+      <div class="hero-grid"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-star"></i>
+        <span>Plateforme de découverte cinématographique</span>
+      </div>
+      <h1 class="hero-title">
+        Explorez l'univers<br />
+        <span class="hero-gradient">du cinéma mondial</span>
+      </h1>
+      <p class="hero-subtitle">
+        Recherchez parmi des milliers de films, sauvegardez vos coups de cœur
+        et découvrez votre prochaine obsession cinématographique.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="search-wrapper" id="searchWrapper">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Rechercher un film, un acteur..."
+            autocomplete="off"
+            aria-label="Rechercher un film"
+          />
+          <button class="search-clear" id="searchClear" aria-label="Effacer" style="display:none">
+            <i class="fas fa-times"></i>
+          </button>
+          <button class="search-btn" id="searchBtn" aria-label="Lancer la recherche">
+            <span>Rechercher</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+        <!-- Suggestions -->
+        <div class="suggestions" id="suggestions" role="listbox" aria-label="Suggestions"></div>
+      </div>
+
+      <!-- Quick Search Tags -->
+      <div class="quick-tags">
+        <span class="quick-label">Populaires :</span>
+        <button class="tag" data-query="Avengers">Avengers</button>
+        <button class="tag" data-query="Inception">Inception</button>
+        <button class="tag" data-query="Interstellar">Interstellar</button>
+        <button class="tag" data-query="Batman">Batman</button>
+        <button class="tag" data-query="Spider-Man">Spider-Man</button>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════ -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar" style="display:none">
+      <div class="stats-container">
+        <div class="stats-info">
+          <i class="fas fa-film"></i>
+          <span id="statsText">0 résultats trouvés</span>
+        </div>
+        <div class="stats-actions">
+          <span class="sort-label">Trier :</span>
+          <select class="sort-select" id="sortSelect" aria-label="Trier les résultats">
+            <option value="default">Par défaut</option>
+            <option value="year-desc">Année (récent)</option>
+            <option value="year-asc">Année (ancien)</option>
+            <option value="title-asc">Titre A→Z</option>
+            <option value="title-desc">Titre Z→A</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION : ACCUEIL (par défaut) ── -->
+    <section class="content-section" id="sectionHome">
+      <!-- Skeleton Loader -->
+      <div class="skeleton-grid" id="skeletonGrid" style="display:none">
+        <div class="skeleton-card" aria-hidden="true">
+          <div class="skeleton-poster"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line" style="width:75%"></div>
+            <div class="skeleton-line" style="width:50%"></div>
+            <div class="skeleton-line" style="width:90%"></div>
+          </div>
+        </div>
+        <div class="skeleton-card" aria-hidden="true">
+          <div class="skeleton-poster"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line" style="width:65%"></div>
+            <div class="skeleton-line" style="width:45%"></div>
+            <div class="skeleton-line" style="width:80%"></div>
+          </div>
+        </div>
+        <div class="skeleton-card" aria-hidden="true">
+          <div class="skeleton-poster"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line" style="width:80%"></div>
+            <div class="skeleton-line" style="width:55%"></div>
+            <div class="skeleton-line" style="width:70%"></div>
+          </div>
+        </div>
+        <div class="skeleton-card" aria-hidden="true">
+          <div class="skeleton-poster"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line" style="width:60%"></div>
+            <div class="skeleton-line" style="width:70%"></div>
+            <div class="skeleton-line" style="width:85%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error / Empty State -->
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="empty-icon">
+          <i class="fas fa-film"></i>
+        </div>
+        <h3 class="empty-title" id="emptyTitle">Aucun résultat trouvé</h3>
+        <p class="empty-text" id="emptyText">Essayez un autre terme de recherche.</p>
+        <button class="btn-primary" id="emptyBtn">
+          <i class="fas fa-search"></i> Nouvelle recherche
+        </button>
+      </div>
+
+      <!-- Movies Grid -->
+      <div class="movies-grid" id="moviesGrid" role="list" aria-label="Résultats de films"></div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination" style="display:none">
+        <button class="page-btn" id="prevPage" aria-label="Page précédente">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="page-numbers" id="pageNumbers"></div>
+        <button class="page-btn" id="nextPage" aria-label="Page suivante">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── SECTION : FAVORIS ── -->
+    <section class="content-section" id="sectionFavorites" style="display:none">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="fas fa-heart"></i>
+          Mes Favoris
+        </h2>
+        <div class="section-actions">
+          <span class="fav-total" id="favTotal">0 film(s)</span>
+          <button class="btn-danger" id="clearFavoritesBtn" style="display:none">
+            <i class="fas fa-trash"></i> Tout supprimer
+          </button>
+        </div>
+      </div>
+
+      <div class="empty-state" id="emptyFavorites">
+        <div class="empty-icon">
+          <i class="fas fa-heart-broken"></i>
+        </div>
+        <h3 class="empty-title">Aucun favori sauvegardé</h3>
+        <p class="empty-text">Recherchez des films et ajoutez-les à vos favoris.</p>
+        <button class="btn-primary" data-section="home" id="goSearchBtn">
+          <i class="fas fa-search"></i> Explorer des films
+        </button>
+      </div>
+
+      <div class="movies-grid" id="favoritesGrid" role="list" aria-label="Films favoris"></div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════
+       MODAL — DÉTAILS DU FILM
+  ═══════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Détails du film" style="display:none">
+    <div class="modal-container">
+      <button class="modal-close" id="modalClose" aria-label="Fermer">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-loader" id="modalLoader">
+        <div class="spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-dot"></div>
+        </div>
+        <p>Chargement des détails...</p>
+      </div>
+
+      <div class="modal-content" id="modalContent" style="display:none">
+        <div class="modal-poster-wrap">
+          <img class="modal-poster" id="modalPoster" src="" alt="" />
+          <div class="modal-poster-glow"></div>
+          <div class="modal-badge" id="modalRated"></div>
+        </div>
+
+        <div class="modal-info">
+          <div class="modal-meta-top">
+            <span class="modal-type" id="modalType"></span>
+            <span class="modal-year" id="modalYear"></span>
+          </div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+
+          <div class="modal-rating-row">
+            <div class="modal-rating" id="modalImdb">
+              <i class="fas fa-star"></i>
+              <span id="modalImdbScore">—</span>
+              <span class="rating-label">IMDb</span>
+            </div>
+            <div class="modal-rating rt" id="modalRt" style="display:none">
+              <i class="fas fa-tomato" style="font-size:.9rem"></i>
+              <span id="modalRtScore">—</span>
+              <span class="rating-label">Rotten Tomatoes</span>
+            </div>
+          </div>
+
+          <div class="modal-tags" id="modalGenre"></div>
+
+          <p class="modal-plot" id="modalPlot"></p>
+
+          <div class="modal-details-grid">
+            <div class="detail-item" id="diDirector">
+              <i class="fas fa-video"></i>
+              <div>
+                <span class="detail-label">Réalisateur</span>
+                <span class="detail-value" id="modalDirector">—</span>
+              </div>
+            </div>
+            <div class="detail-item" id="diActors">
+              <i class="fas fa-users"></i>
+              <div>
+                <span class="detail-label">Acteurs</span>
+                <span class="detail-value" id="modalActors">—</span>
+              </div>
+            </div>
+            <div class="detail-item" id="diRuntime">
+              <i class="fas fa-clock"></i>
+              <div>
+                <span class="detail-label">Durée</span>
+                <span class="detail-value" id="modalRuntime">—</span>
+              </div>
+            </div>
+            <div class="detail-item" id="diCountry">
+              <i class="fas fa-globe"></i>
+              <div>
+                <span class="detail-label">Pays</span>
+                <span class="detail-value" id="modalCountry">—</span>
+              </div>
+            </div>
+            <div class="detail-item" id="diLang">
+              <i class="fas fa-language"></i>
+              <div>
+                <span class="detail-label">Langue</span>
+                <span class="detail-value" id="modalLanguage">—</span>
+              </div>
+            </div>
+            <div class="detail-item" id="diBox">
+              <i class="fas fa-chart-line"></i>
+              <div>
+                <span class="detail-label">Box-office</span>
+                <span class="detail-value" id="modalBoxOffice">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-fav-modal" id="modalFavBtn">
+              <i class="fas fa-heart"></i>
+              <span id="modalFavText">Ajouter aux favoris</span>
+            </button>
+            <a class="btn-imdb" id="modalImdbLink" href="#" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-imdb"></i>
+              Voir sur IMDb
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       TOAST NOTIFICATIONS
+  ═══════════════════════════════════════════════ -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <i class="fas fa-film"></i>
+          <span>Movie<span>Explorer</span></span>
+        </div>
+        <p class="footer-tagline">Votre compagnon cinématographique ultime.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#" data-section="home" class="footer-link">Accueil</a></li>
+          <li><a href="#" data-section="favorites" class="footer-link">Mes Favoris</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Technologies</h4>
+        <ul>
+          <li><a href="https://developer.mozilla.org/fr/docs/Web/JavaScript" target="_blank" rel="noopener">JavaScript ES6+</a></li>
+          <li><a href="https://www.omdbapi.com/" target="_blank" rel="noopener">OMDb API</a></li>
+          <li><a href="https://developer.mozilla.org/fr/docs/Web/API/Fetch_API" target="_blank" rel="noopener">Fetch API</a></li>
+          <li><a href="https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage" target="_blank" rel="noopener">localStorage</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Projet</h4>
+        <ul>
+          <li><a href="#">README</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Technologies FrontEnd</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        &copy; 2025 <strong>Movie Explorer</strong> — Projet universitaire &mdash; Technologies FrontEnd (JavaScript)
+      </p>
+      <p class="footer-api">
+        Données fournies par <a href="https://www.omdbapi.com/" target="_blank" rel="noopener">OMDb API</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
